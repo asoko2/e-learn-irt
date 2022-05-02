@@ -31,53 +31,53 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // echo '<br/> Module id : ';
         // echo $mq['module_id'];
         if ($mq['answer'] == $p) {
-            if ($mq['module_id'] == 60) {
+            if ($mq['module_id'] == 1) {
                 $modul_1[] = 1;
-            } else if ($mq['module_id'] == 61) {
+            } else if ($mq['module_id'] == 2) {
                 $modul_2[] = 1;
-            } else if ($mq['module_id'] == 62) {
+            } else if ($mq['module_id'] == 3) {
                 $modul_3[] = 1;
-            } else if ($mq['module_id'] == 63) {
+            } else if ($mq['module_id'] == 4) {
                 $modul_4[] = 1;
-            } else if ($mq['module_id'] == 64) {
+            } else if ($mq['module_id'] == 5) {
                 $modul_5[] = 1;
-            } else if ($mq['module_id'] == 65) {
+            } else if ($mq['module_id'] == 6) {
                 $modul_6[] = 1;
-            } else if ($mq['module_id'] == 66) {
+            } else if ($mq['module_id'] == 7) {
                 $modul_7[] = 1;
-            } else if ($mq['module_id'] == 67) {
+            } else if ($mq['module_id'] == 8) {
                 $modul_8[] = 1;
-            } else if ($mq['module_id'] == 68) {
+            } else if ($mq['module_id'] == 9) {
                 $modul_9[] = 1;
-            } else if ($mq['module_id'] == 69) {
+            } else if ($mq['module_id'] == 10) {
                 $modul_10[] = 1;
-            } else if ($mq['module_id'] == 70) {
+            } else if ($mq['module_id'] == 11) {
                 $modul_11[] = 1;
             } else {
                 $modul_12[] = 1;
             }
         } else {
-            if ($mq['module_id'] == 60) {
+            if ($mq['module_id'] == 1) {
                 $modul_1[] = 0;
-            } else if ($mq['module_id'] == 61) {
+            } else if ($mq['module_id'] == 2) {
                 $modul_2[] = 0;
-            } else if ($mq['module_id'] == 62) {
+            } else if ($mq['module_id'] == 3) {
                 $modul_3[] = 0;
-            } else if ($mq['module_id'] == 63) {
+            } else if ($mq['module_id'] == 4) {
                 $modul_4[] = 0;
-            } else if ($mq['module_id'] == 64) {
+            } else if ($mq['module_id'] == 5) {
                 $modul_5[] = 0;
-            } else if ($mq['module_id'] == 65) {
+            } else if ($mq['module_id'] == 6) {
                 $modul_6[] = 0;
-            } else if ($mq['module_id'] == 66) {
+            } else if ($mq['module_id'] == 7) {
                 $modul_7[] = 0;
-            } else if ($mq['module_id'] == 67) {
+            } else if ($mq['module_id'] == 8) {
                 $modul_8[] = 0;
-            } else if ($mq['module_id'] == 68) {
+            } else if ($mq['module_id'] == 9) {
                 $modul_9[] = 0;
-            } else if ($mq['module_id'] == 69) {
+            } else if ($mq['module_id'] == 10) {
                 $modul_10[] = 0;
-            } else if ($mq['module_id'] == 70) {
+            } else if ($mq['module_id'] == 11) {
                 $modul_11[] = 0;
             } else {
                 $modul_12[] = 0;

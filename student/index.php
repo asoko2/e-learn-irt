@@ -12,7 +12,6 @@ if ($_SESSION['level_user'] == 3) {
     $survey_row = mysqli_num_rows($survey);
     if ($survey_row == 1) {
         $_SESSION['survey_taken'] = true;
-        $level = mysqli_fetch_array($survey, MYSQLI_ASSOC);
     } else {
         $_SESSION['survey_taken'] = false;
     }
@@ -88,10 +87,12 @@ if ($_SESSION['level_user'] == 3) {
 
                                             $sql = "SELECT * FROM pre_test_result WHERE student_id = '{$_SESSION['student_id']}'";
                                             $query = mysqli_query($conn, $sql);
+                                            $result = mysqli_fetch_array($query, MYSQLI_ASSOC);
+                                            $level = $result['level'];
                                             if (mysqli_num_rows($query) > 0) { ?>
                                     <h6 class="mb-0 fw-bold">
                                         Level materi anda adalah Level
-                                        <strong><?php echo $_SESSION['level'] ?></strong>
+                                        <strong><?php echo $level ?></strong>
                                     </h6>
 
                                     <?php
@@ -99,7 +100,6 @@ if ($_SESSION['level_user'] == 3) {
                                     <h6 class="mb-0 fw-bold">
                                         Anda sudah mengambil Pre-Test, silahkan tunggu hasil pre-test yang masih
                                         diproses
-                                        <strong><?php echo $_SESSION['level'] ?></strong>
                                     </h6>
                                     <?php }
 
