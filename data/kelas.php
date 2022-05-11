@@ -182,10 +182,16 @@ if ($_GET['action'] == 'getKelasPost') {
             $nestedData['kelas'] = $r["class_name"];
             $nestedData['jumlah_murid'] = $jumlah;
             $nestedData['ambil_post'] = $jumlah_ambil;
+            $sudah_ambil = false;
+            if ($jumlah == $jumlah_ambil) {
+                $sudah_ambil = '';
+            } else {
+                $sudah_ambil = 'disabled';
+            }
             if (mysqli_num_rows($query) > 0) {
                 $nestedData['action'] = "<button type='button' disabled id='btn-edit' data='{$r['id']}' class='btn btn-primary text-white'>PRE-TEST SUDAH DIHITUNG</button>";
             } else {
-                $nestedData['action'] = "<form action='../data/hitung_pretest.php' method='POST'><input type='hidden' name='id' value='{$r['id']}'><button type='submit' id='btn-edit' data='{$r['id']}' class='btn btn-success text-white'>HITUNG PRE-TEST</button></form>";
+                $nestedData['action'] = "<form action='../data/hitung_pretest.php' method='POST'><input type='hidden' name='id' value='{$r['id']}'><button type='submit' id='btn-edit' data='{$r['id']}' class='btn btn-success text-white' " . $sudah_ambil . ">HITUNG PRE-TEST</button></form>";
             }
             $data[] = $nestedData;
             $no++;

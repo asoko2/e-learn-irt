@@ -88,8 +88,9 @@ if ($_SESSION['level_user'] == 3) {
                                             $sql = "SELECT * FROM pre_test_result WHERE student_id = '{$_SESSION['student_id']}'";
                                             $query = mysqli_query($conn, $sql);
                                             $result = mysqli_fetch_array($query, MYSQLI_ASSOC);
-                                            $level = $result['level'];
-                                            if (mysqli_num_rows($query) > 0) { ?>
+
+                                            if (mysqli_num_rows($query) > 0) {
+                                                $level = $result['level']; ?>
                                     <h6 class="mb-0 fw-bold">
                                         Level materi anda adalah Level
                                         <strong><?php echo $level ?></strong>

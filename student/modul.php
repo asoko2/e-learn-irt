@@ -13,15 +13,21 @@ $survey_row = mysqli_num_rows($survey);
 if ($survey_row == 1) {
     $sql = "SELECT * FROM pre_test_result WHERE student_id = '{$_SESSION['student_id']}'";
     $query = mysqli_query($conn, $sql);
-    $result = mysqli_fetch_array($query, MYSQLI_ASSOC);
-    $level_user = $result['level'];
-    // $_SESSION['survey_taken'] = true;
-    if ($level_user == 1) {
-        $level_modul = [1, 2, 3];
-    } else if ($level_user == 2) {
-        $level_modul = [2, 3, 1];
+    $_SESSION['survey_taken'] = true;
+    if (mysqli_num_rows($query) > 0) {
+        $result = mysqli_fetch_array($query, MYSQLI_ASSOC);
+        $level_user = $result['level'];
+        // $_SESSION['survey_taken'] = true;
+        if ($level_user == 1) {
+            $level_modul = [1, 2, 3];
+        } else if ($level_user == 2) {
+            $level_modul = [2, 3, 1];
+        } else {
+            $level_modul = [3, 1, 2];
+        }
+        $_SESSION['test_processed'] = true;
     } else {
-        $level_modul = [3, 1, 2];
+        $_SESSION['test_processed'] = false;
     }
 } else {
     $_SESSION['survey_taken'] = false;
@@ -85,54 +91,28 @@ if ($survey_row == 1) {
                                             <?php }
 
                                             unset($_SESSION['gagal_post_test']);
-
-                                            if (isset($level_modul)) {
-                                                foreach ($level_modul as $l) { ?>
+                                            if ($_SESSION['survey_taken']) {
+                                                if (isset($level_modul)) {
+                                                    foreach ($level_modul as $l) { ?>
 
                                             <div class="row">
                                                 <?php
 
-                                                        $sql = "SELECT * FROM module WHERE module_level = '{$l}'";
-                                                        $query = mysqli_query($conn, $sql);
-                                                        $result = mysqli_fetch_all($query, MYSQLI_ASSOC);
-                                                        $last_key = 0;
-                                                        $last_learned = 0;
-                                                        foreach ($result as $key => $r) {
-                                                            $disabled = false;
-                                                            $module_learned = false;
-                                                            if ($l == $level_user) {
-                                                                if ($key == array_key_first($result)) {
-                                                                    $disabled = false;
-                                                                } else {
-                                                                    $sql = "SELECT * FROM module_learned WHERE student_id = '{$_SESSION['student_id']}' order by id DESC limit 1";
-                                                                    $query = mysqli_query($conn, $sql);
-                                                                    if (mysqli_num_rows($query) > 0) {
-                                                                        $modul = mysqli_fetch_array($query, MYSQLI_ASSOC);
-                                                                        if ($modul['module_id'] == $last_key) {
-                                                                            $disabled = false;
-                                                                        } else {
-                                                                            $sql = "SELECT * FROM module_learned WHERE student_id = '{$_SESSION['student_id']}' AND module_id = '{$last_key}'";
-                                                                            $query = mysqli_query($conn, $sql);
-                                                                            if (mysqli_num_rows($query) > 0) {
-                                                                                $disabled = false;
-                                                                            } else {
-                                                                                $disabled = true;
-                                                                            }
-                                                                        }
+                                                            $sql = "SELECT * FROM module WHERE module_level = '{$l}'";
+                                                            $query = mysqli_query($conn, $sql);
+                                                            $result = mysqli_fetch_all($query, MYSQLI_ASSOC);
+                                                            $last_key = 0;
+                                                            $last_learned = 0;
+                                                            foreach ($result as $key => $r) {
+                                                                $disabled = false;
+                                                                $module_learned = false;
+                                                                if ($l == $level_user) {
+                                                                    if ($key == array_key_first($result)) {
+                                                                        $disabled = false;
                                                                     } else {
-                                                                        $disabled = true;
-                                                                    }
-                                                                }
-                                                            } else if ($l < $level_user) {
-                                                                $disable = false;
-                                                            } else {
-                                                                if (isset($level_done)) {
-                                                                    if ($level_done == ($l - 1)) {
-                                                                        if ($key == array_key_first($result)) {
-                                                                            $disabled = false;
-                                                                        } else {
-                                                                            $sql = "SELECT * FROM module_learned WHERE student_id = '{$_SESSION['student_id']}' order by id DESC limit 1";
-                                                                            $query = mysqli_query($conn, $sql);
+                                                                        $sql = "SELECT * FROM module_learned WHERE student_id = '{$_SESSION['student_id']}' order by id DESC limit 1";
+                                                                        $query = mysqli_query($conn, $sql);
+                                                                        if (mysqli_num_rows($query) > 0) {
                                                                             $modul = mysqli_fetch_array($query, MYSQLI_ASSOC);
                                                                             if ($modul['module_id'] == $last_key) {
                                                                                 $disabled = false;
@@ -145,39 +125,65 @@ if ($survey_row == 1) {
                                                                                     $disabled = true;
                                                                                 }
                                                                             }
+                                                                        } else {
+                                                                            $disabled = true;
+                                                                        }
+                                                                    }
+                                                                } else if ($l < $level_user) {
+                                                                    $disable = false;
+                                                                } else {
+                                                                    if (isset($level_done)) {
+                                                                        if ($level_done == ($l - 1)) {
+                                                                            if ($key == array_key_first($result)) {
+                                                                                $disabled = false;
+                                                                            } else {
+                                                                                $sql = "SELECT * FROM module_learned WHERE student_id = '{$_SESSION['student_id']}' order by id DESC limit 1";
+                                                                                $query = mysqli_query($conn, $sql);
+                                                                                $modul = mysqli_fetch_array($query, MYSQLI_ASSOC);
+                                                                                if ($modul['module_id'] == $last_key) {
+                                                                                    $disabled = false;
+                                                                                } else {
+                                                                                    $sql = "SELECT * FROM module_learned WHERE student_id = '{$_SESSION['student_id']}' AND module_id = '{$last_key}'";
+                                                                                    $query = mysqli_query($conn, $sql);
+                                                                                    if (mysqli_num_rows($query) > 0) {
+                                                                                        $disabled = false;
+                                                                                    } else {
+                                                                                        $disabled = true;
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        } else {
+                                                                            $disabled = true;
                                                                         }
                                                                     } else {
                                                                         $disabled = true;
                                                                     }
-                                                                } else {
-                                                                    $disabled = true;
                                                                 }
-                                                            }
 
-                                                            $last_key = $r['id'];
-                                                            $sql = "SELECT * FROM module_learned WHERE student_id = '{$_SESSION['student_id']}' AND module_id = '{$r['id']}'";
-                                                            $query = mysqli_query($conn, $sql);
-                                                            if (mysqli_num_rows($query) > 0) {
-                                                                $module_learned = true;
-                                                            }
+                                                                $last_key = $r['id'];
+                                                                $sql = "SELECT * FROM module_learned WHERE student_id = '{$_SESSION['student_id']}' AND module_id = '{$r['id']}'";
+                                                                $query = mysqli_query($conn, $sql);
+                                                                if (mysqli_num_rows($query) > 0) {
+                                                                    $module_learned = true;
+                                                                }
 
-                                                            if ($key == array_key_last($result) && $module_learned == true) {
-                                                                $level_done = $l;
-                                                            }
+                                                                if ($key == array_key_last($result) && $module_learned == true) {
+                                                                    $level_done = $l;
+                                                                }
 
 
-                                                        ?>
+                                                            ?>
 
                                                 <div class="col-md-3">
                                                     <a href="module.php?module=<?php echo $r['id'] ?>"
                                                         class="text-decoration-none <?php if ($disabled) { ?>disabled-link<?php } ?>">
                                                         <div class="card modul mb-3 <?php if ($disabled) {
-                                                                                                    echo "bg-dark text-white";
-                                                                                                } else if ($module_learned) {
-                                                                                                    echo "bg-success text-white";
-                                                                                                } else {
-                                                                                                    echo "text-black";
-                                                                                                } ?>">
+                                                                                                        echo "bg-dark text-white";
+                                                                                                    } else if ($module_learned) {
+                                                                                                        echo "bg-success text-white";
+                                                                                                    } else {
+                                                                                                        echo "text-black";
+                                                                                                    } ?>">
                                                             <div class="card-body">
                                                                 <div class="card-title">
                                                                     <span>Modul
@@ -197,6 +203,12 @@ if ($survey_row == 1) {
                                                 <?php } ?>
                                             </div>
                                             <hr />
+                                            <?php }
+                                                } else { ?>
+                                            <h1>Proses penghitungan pre-test belum selesai, silahkan tunggu hasil
+                                                pre-test yang masih
+                                                diproses</h1>
+                                            <a href="index.php" class="btn btn-primary">KEMBALI KE HOME</a>
                                             <?php }
                                             } else { ?>
                                             <h1>ANDA BELUM MELAKUKAN PRE-TEST</h1>
